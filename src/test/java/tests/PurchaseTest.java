@@ -38,17 +38,21 @@ public class PurchaseTest extends BaseClass {
 
     @Test
     public void testPurchaseFlow() {
+
+        System.out.println("Step 1: Starting test");
+
         login.login("standard_user", "secret_sauce");
-        test.pass("Logged in");
+        System.out.println("Step 2: Logged in");
 
         home.addItemToCart();
-        test.pass("Item added");
+        System.out.println("Step 3: Item added");
 
         home.goToCart();
-        test.pass("Navigated to cart");
+        System.out.println("Step 4: Navigated to cart");
 
+        System.out.println("Step 5: Before checkout");
         cart.checkout();
-        test.pass("Clicked checkout");
+        System.out.println("Step 6: After checkout");
     }
 
     @AfterMethod

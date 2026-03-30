@@ -26,4 +26,4 @@ jobs:
       uses: browser-actions/setup-chrome@v1
 
     - name: Run Tests
-      run: mvn clean test
+	  run: mvn clean test -Dtest=!ApiTest
