@@ -1,5 +1,7 @@
 package utils;
 
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,22 +11,28 @@ public class BaseClass {
 
     public void setup() {
 
-    	String env = System.getProperty("env");
+        ChromeOptions options = new ChromeOptions();
 
-    	ChromeOptions options = new ChromeOptions();
+        String isCI = System.getenv("CI");
 
-    	if ("ci".equals(env)) {
-    	    options.addArguments("--headless");
-    	    options.addArguments("--no-sandbox");
-    	    options.addArguments("--disable-dev-shm-usage");
-    	}
+        if ("true".equalsIgnoreCase(isCI)) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--window-size=1920,1080");
+        }
 
-    	driver = new ChromeDriver(options);
+        driver = new ChromeDriver(options);
 
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
         driver.get("https://www.saucedemo.com/");
     }
+
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
