@@ -21,14 +21,21 @@ public class CartPage {
 
         wait.until(ExpectedConditions.elementToBeClickable(checkoutBtn));
 
-        WebElement checkout = driver.findElement(checkoutBtn);
-
         try {
-            checkout.click();
+            driver.findElement(checkoutBtn).click();
+            System.out.println("Tried normal checkout click");
         } catch (Exception e) {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkout);
+            System.out.println("Normal checkout failed → using JS click");
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", driver.findElement(checkoutBtn));
         }
 
-        wait.until(ExpectedConditions.urlContains("checkout-step-one")); // 🔥 correct URL
+        // 🔥 IMPORTANT WAIT
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("checkout-step-one"),
+            ExpectedConditions.visibilityOfElementLocated(By.id("first-name"))
+        ));
+
+        System.out.println("Checkout page loaded");
     }
 }

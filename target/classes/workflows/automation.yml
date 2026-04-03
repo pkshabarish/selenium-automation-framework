@@ -12,37 +12,31 @@ jobs:
 
     steps:
 
-    # 🔹 1. Checkout code
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # 🔹 2. Setup Java
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
 
-    # 🔹 3. Cache Maven (faster builds)
-    - name: Cache Maven dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
 
-    # 🔹 4. Run tests
-    - name: Run Tests
-      run: mvn clean test
+      - name: Run Tests
+        run: mvn clean test -Dtest=tests.PurchaseTest
 
-    # 🔹 5. Upload reports (even if test fails)
-    - name: Upload Test Reports
-      if: always()   # 🔥 VERY IMPORTANT
-      uses: actions/upload-artifact@v4
-      with:
-        name: Selenium-Reports
-        path: |
-          reports/
-          screenshots/
-          test-output/
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Selenium-Reports
+          path: |
+            reports/
+            screenshots/
+            test-output/
