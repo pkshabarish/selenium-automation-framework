@@ -2,29 +2,32 @@ package utils;
 
 import org.openqa.selenium.*;
 import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 public class ScreenshotUtil {
 
-    public static void capture(WebDriver driver, String name) {
+    public static String captureScreenshot(WebDriver driver, String name) {
+
+        String path = System.getProperty("user.dir") + "/screenshots/" + name + ".png";
+
         try {
-            // Take screenshot
             File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            File dest = new File(path);
 
-            // Create folder if not exists
-            File folder = new File("screenshots");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-
-            // Save file
-            File dest = new File("screenshots/" + name + ".png");
             FileUtils.copyFile(src, dest);
 
-            System.out.println("Screenshot saved: " + dest.getAbsolutePath());
+            System.out.println("Screenshot saved: " + path);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Screenshot failed: " + e.getMessage());
         }
+
+        return path;
     }
+
+	public static String capture(WebDriver driver, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
