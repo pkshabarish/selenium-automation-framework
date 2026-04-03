@@ -41,6 +41,6 @@ public class HomePage {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", cart);
         }
 
-        wait.until(ExpectedConditions.urlContains("cart"));  // 🔥 must
+        wait.until(ExpectedConditions.urlContains("cart.html")); // 🔥 must
     }
 }
