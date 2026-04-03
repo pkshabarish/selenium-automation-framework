@@ -19,26 +19,16 @@ public class CartPage {
 
     public void checkout() {
 
-        WebElement checkout = wait.until(ExpectedConditions.elementToBeClickable(checkoutBtn));
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutBtn));
 
-        // 🔥 Try normal click
-        checkout.click();
-        System.out.println("Tried normal checkout click");
+        WebElement checkout = driver.findElement(checkoutBtn);
 
-        // 🔥 If still on cart page → use JS click
-        if (!driver.getCurrentUrl().contains("checkout")) {
-
-            System.out.println("Normal checkout click failed → using JS click");
-
+        try {
+            checkout.click();
+        } catch (Exception e) {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkout);
         }
 
-        // 🔥 FINAL WAIT
-        wait.until(ExpectedConditions.or(
-            ExpectedConditions.urlContains("checkout"),
-            ExpectedConditions.visibilityOfElementLocated(firstNameField)
-        ));
-
-        System.out.println("Checkout page loaded");
+        wait.until(ExpectedConditions.urlContains("checkout-step-one")); // 🔥 correct URL
     }
 }

@@ -29,23 +29,18 @@ public class HomePage {
 
     public void goToCart() {
 
-        WebElement cart = wait.until(ExpectedConditions.elementToBeClickable(cartIcon));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(cartIcon));
 
-        // 🔥 Try normal click first
-        cart.click();
-        System.out.println("Tried normal click");
+        WebElement cart = driver.findElement(cartIcon);
 
-        // 🔥 HARD CHECK → if still not navigated, use JS click
-        if (!driver.getCurrentUrl().contains("cart")) {
-
-            System.out.println("Normal click failed → using JS click");
-
+        try {
+            cart.click();
+            System.out.println("Clicked cart normally");
+        } catch (Exception e) {
+            System.out.println("Using JS click");
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", cart);
         }
 
-        // 🔥 FINAL WAIT
-        wait.until(ExpectedConditions.urlContains("cart"));
-
-        System.out.println("Cart page loaded");
+        wait.until(ExpectedConditions.urlContains("cart"));  // 🔥 must
     }
 }
